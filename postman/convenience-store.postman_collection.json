@@ -1,0 +1,215 @@
+{
+  "info": {
+    "name": "Convenience Store API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for Convenience Store backend"
+  },
+  "item": [
+    {
+      "name": "List Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products?q=milk&page=0&size=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ],
+          "query": [
+            {"key": "q", "value": "milk"},
+            {"key": "page", "value": "0"},
+            {"key": "size", "value": "10"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Product By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerName\": \"Nguyen Van A\",\n  \"customerPhone\": \"0900000000\",\n  \"customerAddress\": \"HCM\",\n  \"note\": \"b?n t?i qu?y\",\n  \"items\": [\n    {\"productId\": 1, \"quantity\": 2},\n    {\"productId\": 3, \"quantity\": 1}\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/orders",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Initiate VNPAY Payment",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/{{orderId}}/payments/vnpay",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "{{orderId}}",
+            "payments",
+            "vnpay"
+          ]
+        }
+      }
+    },
+    {
+      "name": "VNPAY Return",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/payments/vnpay/return?vnp_TxnRef=PAY20250101120000ABCDEF&vnp_ResponseCode=00",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "vnpay",
+            "return"
+          ],
+          "query": [
+            {"key": "vnp_TxnRef", "value": "PAY20250101120000ABCDEF"},
+            {"key": "vnp_ResponseCode", "value": "00"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "VNPAY IPN",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/x-www-form-urlencoded"}
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {"key": "vnp_TxnRef", "value": "PAY20250101120000ABCDEF"},
+            {"key": "vnp_ResponseCode", "value": "00"},
+            {"key": "vnp_TransactionStatus", "value": "00"}
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/payments/vnpay/ipn",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "payments",
+            "vnpay",
+            "ipn"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Download Invoice",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/reports/invoices/{{orderId}}.pdf",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "reports",
+            "invoices",
+            "{{orderId}}.pdf"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Revenue Stats",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/stats/revenue?granularity=day&from=2025-01-01&to=2025-01-31",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "stats",
+            "revenue"
+          ],
+          "query": [
+            {"key": "granularity", "value": "day"},
+            {"key": "from", "value": "2025-01-01"},
+            {"key": "to", "value": "2025-01-31"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Top Products",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/stats/top-products?from=2025-01-01&to=2025-01-31&limit=5",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "stats",
+            "top-products"
+          ],
+          "query": [
+            {"key": "from", "value": "2025-01-01"},
+            {"key": "to", "value": "2025-01-31"},
+            {"key": "limit", "value": "5"}
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "orderId",
+      "value": "1"
+    }
+  ]
+}

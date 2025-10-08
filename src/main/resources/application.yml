@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/convenience_store?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Ho_Chi_Minh}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+  flyway:
+    enabled: ${FLYWAY_ENABLED:false}
+    locations: classpath:db/migration
+  sql:
+    init:
+      mode: always
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: ${SERVER_PORT:8090}
+  shutdown: graceful
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+  api-docs:
+    path: /api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+vnpay:
+  tmnCode: ${VNP_TMN_CODE:demo}
+  hashSecret: ${VNP_HASH_SECRET:secret}
+  payUrl: ${VNP_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
+  returnUrl: ${VNP_RETURN_URL:http://localhost:8090/api/payments/vnpay/return}
+  ipnUrl: ${VNP_IPN_URL:http://localhost:8090/api/payments/vnpay/ipn}
+  version: ${VNP_VERSION:2.1.0}
+  command: ${VNP_COMMAND:pay}
+  currCode: ${VNP_CURR_CODE:VND}
+  locale: ${VNP_LOCALE:vn}
