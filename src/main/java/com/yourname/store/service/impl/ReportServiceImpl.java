@@ -15,6 +15,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -48,41 +50,32 @@ public class ReportServiceImpl implements ReportService {
         params.put("note", order.getNote());
         params.put("totalAmount", order.getTotalAmount());
         params.put("itemCount", items.size());
-        params.put("logo", loadLogoStream());
+        // Logo không còn cần thiết trong thiết kế mới
+        params.put("logo", null);
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(items);
 
         try (InputStream templateStream = loadTemplateStream()) {
-            JasperReport report = JasperCompileManager.compileReport(templateStream);
+            // Sử dụng JRXmlLoader để tải trực tiếp từ stream
+            JasperDesign jasperDesign = JRXmlLoader.load(templateStream);
+            JasperReport report = JasperCompileManager.compileReport(jasperDesign);
+
             JasperPrint print = JasperFillManager.fillReport(report, params, dataSource);
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
+            e.printStackTrace(); // In lỗi để dễ debug
             throw new IllegalStateException("Failed to generate invoice PDF", e);
         }
     }
 
     private InputStream loadTemplateStream() {
         try {
-            Resource resource = resourceLoader.getResource("classpath:reports/invoice_new.jrxml");
+            Resource resource = resourceLoader.getResource("classpath:reports/invoice.jrxml");
             return resource.getInputStream();
         } catch (Exception ex) {
             throw new IllegalStateException("Unable to load invoice template", ex);
         }
     }
 
-    private InputStream loadLogoStream() {
-        try {
-            Resource resource = resourceLoader.getResource("classpath:static/images/falimy_mart_logo.png");
-            return resource.getInputStream();
-        } catch (Exception ex) {
-            System.err.println(
-                    "Failed to load logo from primary location, falling back to default logo: " + ex.getMessage());
-            try {
-                Resource defaultResource = resourceLoader.getResource("classpath:static/logo.png");
-                return defaultResource.getInputStream();
-            } catch (Exception fallbackEx) {
-                throw new IllegalStateException("Unable to load invoice logo", fallbackEx);
-            }
-        }
-    }
+    // Phương thức loadLogoStream đã được xóa vì không còn cần thiết
 }

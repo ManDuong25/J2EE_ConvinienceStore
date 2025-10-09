@@ -1092,21 +1092,52 @@ const StatsPage = () => {
                   if (orderPreview?.order?.id) {
                     try {
                       setPdfLoading(true);
-                      const invoiceUrl = `${import.meta.env.VITE_API_URL}/api/reports/invoices/${orderPreview.order.id}.pdf`;
+                      // Sử dụng API_BASE_URL đúng cách, với fallback giống như axiosClient
+                      const baseURL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api";
+                      // Xây dựng URL đúng không bao gồm /api hai lần
+                      const invoiceUrl = baseURL.endsWith('/api')
+                        ? `${baseURL}/reports/invoices/${orderPreview.order.id}.pdf`
+                        : `${baseURL}/api/reports/invoices/${orderPreview.order.id}.pdf`;
 
-                      const response = await fetch(invoiceUrl);
+                      console.log('Đang tải PDF từ URL:', invoiceUrl);
+
+                      // Sử dụng fetch với responseType 'blob'
+                      const response = await fetch(invoiceUrl, {
+                        method: 'GET',
+                        headers: {
+                          'Accept': 'application/pdf',
+                        },
+                      });
+
                       if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                       }
 
+                      // Lấy dữ liệu blob từ response
                       const blob = await response.blob();
-                      const downloadUrl = window.URL.createObjectURL(blob);
+
+                      // Kiểm tra content-type của blob
+                      if (blob.type !== 'application/pdf') {
+                        console.warn(`Unexpected content type: ${blob.type}, expected: application/pdf`);
+                      }
+
+                      // Tạo URL từ blob
+                      const downloadUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+
+                      // Tạo phần tử a để tải xuống
                       const link = document.createElement('a');
                       link.href = downloadUrl;
                       link.download = `hoa-don-${orderPreview.order.code}.pdf`;
+
+                      // Thêm vào DOM, click và loại bỏ
                       document.body.appendChild(link);
                       link.click();
-                      link.remove();
+
+                      // Cleanup
+                      setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(downloadUrl);
+                      }, 100);
 
                       toast.success("Xuất file PDF thành công!");
                     } catch (error) {

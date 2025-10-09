@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports https://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="invoice" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40"
-              topMargin="40" bottomMargin="40" uuid="d3a47f0d-3e01-4a20-8a21-040df28acf0a">
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+                                  http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="invoice" pageWidth="595" pageHeight="842" columnWidth="515"
+              leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40"
+              uuid="d3a47f0d-3e01-4a20-8a21-040df28acf0a">
     <parameter name="logo" class="java.io.InputStream"/>
     <parameter name="orderCode" class="java.lang.String"/>
     <parameter name="orderDate" class="java.time.LocalDateTime"/>
@@ -22,114 +24,168 @@
 
     <title>
         <band height="120">
-            <image>
-                <reportElement x="0" y="0" width="120" height="60" uuid="d41288d5-59d8-4989-8653-d9961c3c2de0"/>
-                <imageExpression><![CDATA[$P{logo}]]></imageExpression>
-            </image>
             <staticText>
-                <reportElement x="140" y="10" width="250" height="25" uuid="3d311f4c-87b0-4008-99a0-12075b121977"/>
-                <textElement>
-                    <font size="18" isBold="true"/>
+                <reportElement x="0" y="10" width="515" height="30" uuid="3d311f4c-87b0-4008-99a0-12075b121977"/>
+                <textElement textAlignment="Center">
+                    <font size="22" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Convenience Store Invoice]]></text>
+                <text><![CDATA[Family Mart]]></text>
             </staticText>
+            <staticText>
+                <reportElement x="0" y="40" width="515" height="20" uuid="8c238fcc-147f-4d7e-8df1-318a923302cc"/>
+                <textElement textAlignment="Center">
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Orders Report]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="70" width="515" height="1" uuid="b73e9377-ebbb-4958-b3d7-1248940c7757"/>
+            </line>
             <textField>
-                <reportElement x="0" y="70" width="300" height="20" uuid="5ac5296a-085f-4cc1-96cd-46f7c5cb5827"/>
+                <reportElement x="0" y="80" width="300" height="20" uuid="5ac5296a-085f-4cc1-96cd-46f7c5cb5827"/>
                 <textElement>
-                    <font size="11"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Order Code: " + $P{orderCode}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="320" y="70" width="200" height="20" uuid="05a44f19-f9ec-46c1-9c8b-4d5ff32f9116"/>
-                <textElement>
-                    <font size="11"/>
+                <reportElement x="320" y="80" width="195" height="20" uuid="05a44f19-f9ec-46c1-9c8b-4d5ff32f9116"/>
+                <textElement textAlignment="Right">
+                    <font size="12"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Date: " + ($P{orderDate} != null ? $P{orderDate}.toString() : "")]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Date: " + ($P{orderDate} != null ? $P{orderDate}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "")]]></textFieldExpression>
             </textField>
         </band>
     </title>
 
     <pageHeader>
-        <band height="80">
-            <textField>
-                <reportElement x="0" y="0" width="300" height="20" uuid="38fa2e1a-ab5e-4c4f-9bb2-755bb98b9f2b"/>
+        <band height="90">
+            <staticText>
+                <reportElement x="0" y="0" width="515" height="20" uuid="7a5e593a-a92a-4429-9e21-073891628d19"/>
                 <textElement>
                     <font size="12" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Customer: " + $P{customerName}]]></textFieldExpression>
-            </textField>
+                <text><![CDATA[Customer Information:]]></text>
+            </staticText>
+            <rectangle>
+                <reportElement x="0" y="20" width="515" height="60" backcolor="#F9F9F9" uuid="d2c57139-746d-4e79-8d5e-464c64c2fa20"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </graphicElement>
+            </rectangle>
             <textField>
-                <reportElement x="0" y="25" width="300" height="20" uuid="c30f0cb3-7d9f-4100-9aa2-8771c7b17076"/>
+                <reportElement x="10" y="25" width="495" height="20" uuid="38fa2e1a-ab5e-4c4f-9bb2-755bb98b9f2b"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{customerName}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="10" y="45" width="300" height="15" uuid="c30f0cb3-7d9f-4100-9aa2-8771c7b17076"/>
                 <textElement>
                     <font size="11"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Phone: " + $P{customerPhone}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{customerPhone} != null && !$P{customerPhone}.isEmpty() ? "Phone: " + $P{customerPhone} : null]]></textFieldExpression>
             </textField>
-            <textField>
-                <reportElement x="0" y="50" width="500" height="20" uuid="bc4a7584-afb3-4dd0-bd32-476cca815864"/>
+            <textField isBlankWhenNull="true">
+                <reportElement x="10" y="60" width="495" height="15" uuid="bc4a7584-afb3-4dd0-bd32-476cca815864"/>
                 <textElement>
                     <font size="11"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Address: " + $P{customerAddress}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{customerAddress} != null && !$P{customerAddress}.isEmpty() ? "Address: " + $P{customerAddress} : null]]></textFieldExpression>
             </textField>
         </band>
     </pageHeader>
 
     <columnHeader>
-        <band height="25">
+        <band height="30">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="0" width="515" height="25" backcolor="#F2F2F2" uuid="7bb9fb03-bbbc-4039-8d30-fe7f86670ac0"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#AAAAAA"/>
+                </graphicElement>
+            </rectangle>
             <staticText>
-                <reportElement x="0" y="0" width="60" height="20" uuid="c4f6cf36-0f88-4c10-9cda-772cefb4e1c5"/>
-                <textElement textAlignment="Center"/>
+                <reportElement x="5" y="5" width="60" height="20" uuid="c4f6cf36-0f88-4c10-9cda-772cefb4e1c5"/>
+                <textElement textAlignment="Left">
+                    <font size="11" isBold="true"/>
+                </textElement>
                 <text><![CDATA[Code]]></text>
             </staticText>
             <staticText>
-                <reportElement x="70" y="0" width="200" height="20" uuid="48126f0e-5cbd-489c-b4b5-e4380e7f7bf1"/>
-                <textElement textAlignment="Left"/>
+                <reportElement x="75" y="5" width="200" height="20" uuid="48126f0e-5cbd-489c-b4b5-e4380e7f7bf1"/>
+                <textElement textAlignment="Left">
+                    <font size="11" isBold="true"/>
+                </textElement>
                 <text><![CDATA[Product]]></text>
             </staticText>
             <staticText>
-                <reportElement x="280" y="0" width="60" height="20" uuid="2383b733-2ed3-448e-8f46-98f9a3fb3c0a"/>
-                <textElement textAlignment="Center"/>
+                <reportElement x="285" y="5" width="60" height="20" uuid="2383b733-2ed3-448e-8f46-98f9a3fb3c0a"/>
+                <textElement textAlignment="Center">
+                    <font size="11" isBold="true"/>
+                </textElement>
                 <text><![CDATA[Qty]]></text>
             </staticText>
             <staticText>
-                <reportElement x="350" y="0" width="80" height="20" uuid="6a755a2d-5d44-4522-9111-215bb4e65e6d"/>
-                <textElement textAlignment="Right"/>
+                <reportElement x="350" y="5" width="80" height="20" uuid="6a755a2d-5d44-4522-9111-215bb4e65e6d"/>
+                <textElement textAlignment="Right">
+                    <font size="11" isBold="true"/>
+                </textElement>
                 <text><![CDATA[Unit Price]]></text>
             </staticText>
             <staticText>
-                <reportElement x="440" y="0" width="80" height="20" uuid="6e75e36e-7a17-45e3-8dc1-04bb766176be"/>
-                <textElement textAlignment="Right"/>
-                <text><![CDATA[Line Total]]></text>
+                <reportElement x="440" y="5" width="70" height="20" uuid="6e75e36e-7a17-45e3-8dc1-04bb766176be"/>
+                <textElement textAlignment="Right">
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total]]></text>
             </staticText>
         </band>
     </columnHeader>
 
     <detail>
-        <band height="20">
+        <band height="25">
+            <rectangle>
+                <reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="25" uuid="878e9a4d-9ccd-4038-a8bd-9c6c0124846c">
+                    <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                </reportElement>
+                <graphicElement>
+                    <pen lineWidth="0.0" lineColor="#FFFFFF"/>
+                </graphicElement>
+            </rectangle>
             <textField>
-                <reportElement x="0" y="0" width="60" height="18" uuid="dc2f7238-f977-4b05-b1ca-5f4b75d2fa93"/>
-                <textElement textAlignment="Center"/>
+                <reportElement x="5" y="3" width="60" height="18" uuid="dc2f7238-f977-4b05-b1ca-5f4b75d2fa93"/>
+                <textElement textAlignment="Left">
+                    <font size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{productCode}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="70" y="0" width="200" height="18" uuid="8d2ca1e2-d3bd-457d-b7f2-946f6b1d6ff9"/>
+                <reportElement x="75" y="3" width="200" height="18" uuid="8d2ca1e2-d3bd-457d-b7f2-946f6b1d6ff9"/>
+                <textElement>
+                    <font size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="280" y="0" width="60" height="18" uuid="eae9d7df-d1dd-4015-8d89-0f5a2b342ad7"/>
-                <textElement textAlignment="Center"/>
+                <reportElement x="285" y="3" width="60" height="18" uuid="eae9d7df-d1dd-4015-8d89-0f5a2b342ad7"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
             </textField>
-            <textField pattern="#,##0">
-                <reportElement x="350" y="0" width="80" height="18" uuid="5c347e39-13ac-4979-8033-6db3d6541a62"/>
-                <textElement textAlignment="Right"/>
+            <textField pattern="#,##0 ₫">
+                <reportElement x="350" y="3" width="80" height="18" uuid="5c347e39-13ac-4979-8033-6db3d6541a62"/>
+                <textElement textAlignment="Right">
+                    <font size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
             </textField>
-            <textField pattern="#,##0">
-                <reportElement x="440" y="0" width="80" height="18" uuid="a6a7b78b-77c3-4631-9f4b-9a1d83d214ce"/>
-                <textElement textAlignment="Right"/>
+            <textField pattern="#,##0 ₫">
+                <reportElement x="440" y="3" width="70" height="18" uuid="a6a7b78b-77c3-4631-9f4b-9a1d83d214ce"/>
+                <textElement textAlignment="Right">
+                    <font size="10"/>
+                </textElement>
                 <textFieldExpression><![CDATA[$F{lineTotal}]]></textFieldExpression>
             </textField>
         </band>
@@ -137,22 +193,47 @@
 
     <summary>
         <band height="140">
-            <textField pattern="#,##0">
-                <reportElement x="360" y="10" width="160" height="20" uuid="f838a802-f278-4b5f-a27e-f7845f8da95a"/>
-                <textElement textAlignment="Right"/>
+            <line>
+                <reportElement x="0" y="5" width="515" height="1" uuid="a5a29933-bacc-4e68-aee6-e062e773a409"/>
+                <graphicElement>
+                    <pen lineWidth="1.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+                </graphicElement>
+            </line>
+            <textField pattern="#,##0 ₫">
+                <reportElement x="340" y="15" width="170" height="25" uuid="f838a802-f278-4b5f-a27e-f7845f8da95a"/>
+                <textElement textAlignment="Right">
+                    <font size="14" isBold="true"/>
+                </textElement>
                 <textFieldExpression><![CDATA["Total: " + $P{totalAmount}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="0" y="35" width="500" height="20" uuid="1f4fad20-e3f0-4489-a99f-2f9d7847c933"/>
-                <textFieldExpression><![CDATA["Items: " + $P{itemCount}]]></textFieldExpression>
+                <reportElement x="0" y="15" width="300" height="20" uuid="1f4fad20-e3f0-4489-a99f-2f9d7847c933"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Total Items: " + $P{itemCount}]]></textFieldExpression>
             </textField>
-            <textField>
-                <reportElement x="0" y="60" width="500" height="40" uuid="40c1edaa-1d4d-45a0-94dc-28df18ad19f1"/>
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="50" width="515" height="60" uuid="40c1edaa-1d4d-45a0-94dc-28df18ad19f1"/>
+                <box>
+                    <topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                </box>
                 <textElement>
                     <font size="10"/>
+                    <paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{note} == null ? "" : "Note: " + $P{note}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{note} == null || $P{note}.isEmpty() ? null : "Note: " + $P{note}]]></textFieldExpression>
             </textField>
+            <staticText>
+                <reportElement x="0" y="120" width="515" height="20" uuid="94013deb-886d-4d6a-8bed-29fdb0551965"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[Thank you for shopping at Family Mart!]]></text>
+            </staticText>
         </band>
     </summary>
 </jasperReport>

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports https://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="invoice" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40"
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" 
+  "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport name="invoice" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40"
               topMargin="40" bottomMargin="40" uuid="d3a47f0d-3e01-4a20-8a21-040df28acf0a">
     <parameter name="logo" class="java.io.InputStream"/>
     <parameter name="orderCode" class="java.lang.String"/>
@@ -29,21 +28,21 @@
             <staticText>
                 <reportElement x="140" y="10" width="250" height="25" uuid="3d311f4c-87b0-4008-99a0-12075b121977"/>
                 <textElement>
-                    <font fontName="DejaVu Sans" size="18" isBold="true"/>
+                    <font size="18" isBold="true"/>
                 </textElement>
                 <text><![CDATA[FALIMY MART]]></text>
             </staticText>
             <staticText>
                 <reportElement x="140" y="35" width="250" height="15" uuid="18f2d9d6-5abd-4210-908c-465c8f9b5e4a"/>
                 <textElement>
-                    <font fontName="DejaVu Sans" size="10"/>
+                    <font size="10"/>
                 </textElement>
-                <text><![CDATA[Địa chỉ: 123 Nguyễn Văn Linh, Quận 7, TP.HCM]]></text>
+                <text><![CDATA[Dia chi: 123 Nguyen Van Linh, Quan 7, TP.HCM]]></text>
             </staticText>
             <staticText>
                 <reportElement x="140" y="50" width="250" height="15" uuid="27f56cf0-69a6-42cd-989c-a0489b3fdc1c"/>
                 <textElement>
-                    <font fontName="DejaVu Sans" size="10"/>
+                    <font size="10"/>
                 </textElement>
                 <text><![CDATA[Hotline: 1900 0000]]></text>
             </staticText>
