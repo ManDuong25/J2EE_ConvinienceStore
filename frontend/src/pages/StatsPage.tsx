@@ -227,6 +227,7 @@ const StatsPage = () => {
     loading: boolean;
     order?: OrderResponse;
   } | null>(null);
+  const [pdfLoading, setPdfLoading] = useState<boolean>(false);
 
   const [orderFiltersState, setOrderFiltersState] = useState<OrdersFilters>(() =>
     createDefaultOrderFilters()
@@ -1084,10 +1085,42 @@ const StatsPage = () => {
             <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50 px-6 py-4">
               <button
                 type="button"
-                className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
-                onClick={() => toast("Chuc nang dang duoc phat trien")}
+                disabled={pdfLoading}
+                className={`rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold ${pdfLoading ? "bg-slate-100 text-slate-400" : "text-slate-600 hover:bg-slate-100"
+                  } transition`}
+                onClick={async () => {
+                  if (orderPreview?.order?.id) {
+                    try {
+                      setPdfLoading(true);
+                      const invoiceUrl = `${import.meta.env.VITE_API_URL}/api/reports/invoices/${orderPreview.order.id}.pdf`;
+
+                      const response = await fetch(invoiceUrl);
+                      if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                      }
+
+                      const blob = await response.blob();
+                      const downloadUrl = window.URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = downloadUrl;
+                      link.download = `hoa-don-${orderPreview.order.code}.pdf`;
+                      document.body.appendChild(link);
+                      link.click();
+                      link.remove();
+
+                      toast.success("Xuất file PDF thành công!");
+                    } catch (error) {
+                      console.error("Lỗi khi tải xuống PDF:", error);
+                      toast.error("Không thể tạo hóa đơn, vui lòng thử lại");
+                    } finally {
+                      setPdfLoading(false);
+                    }
+                  } else {
+                    toast.error("Không thể tạo hóa đơn, vui lòng thử lại");
+                  }
+                }}
               >
-                Xuat file PDF
+                {pdfLoading ? "Đang xuất file..." : "Xuat file PDF"}
               </button>
               <button
                 type="button"

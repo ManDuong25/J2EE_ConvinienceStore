@@ -82,6 +82,11 @@ curl "http://localhost:8080/api/stats/top-products?from=2025-01-01&to=2025-03-31
 4. For local IPN testing use `ngrok` or similar.
 5. The integration signs parameters alphabetically using HMAC SHA512; incoming IPN/return requests are revalidated.
 
+## Jasper report
+1. For report designing: JasperSoft studio
+2. dependency: JasperReports Library
+3. Create .jrxml file (design layout)
+4. Report Service: ReportServiceImpl
 ## Database Initialization Strategy
 - **Default**: `spring.jpa.hibernate.ddl-auto=update` + `data.sql` seeders (compatible with legacy MySQL like XAMPP 5.5).
 - **Flyway**: Set `FLYWAY_ENABLED=true` and optionally `JPA_DDL_AUTO=none` for environments with MySQL/MariaDB ≥ 5.7. Migrations live in `src/main/resources/db/migration` and seed data is handled by the scripts.

@@ -21,7 +21,7 @@ public class ReportController {
     public ResponseEntity<byte[]> getInvoice(@PathVariable("orderId") Long orderId) {
         byte[] pdf = reportService.generateInvoicePdf(orderId);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"invoice-" + orderId + ".pdf\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"hoa-don-" + orderId + ".pdf\"")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }

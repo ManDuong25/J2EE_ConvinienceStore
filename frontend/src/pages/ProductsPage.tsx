@@ -87,6 +87,10 @@ const ProductsPage = () => {
     fetchProducts({ page: nextPage });
   };
 
+  const handlePdfExport = () => {
+    console.log(products);
+  }
+
   return (
     <section className="space-y-8">
       <div className="flex items-center justify-between gap-4">
@@ -134,6 +138,13 @@ const ProductsPage = () => {
           </label>
         </div>
         <div className="flex items-end justify-end">
+          <button
+            type="button"
+            className="rounded-md mr-4 border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
+            onClick={handlePdfExport}
+          >
+            Xuat file PDF
+          </button>
           <button
             type="submit"
             className="w-full rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark md:w-auto"

@@ -63,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
 
     private InputStream loadTemplateStream() {
         try {
-            Resource resource = resourceLoader.getResource("classpath:reports/invoice.jrxml");
+            Resource resource = resourceLoader.getResource("classpath:reports/invoice_new.jrxml");
             return resource.getInputStream();
         } catch (Exception ex) {
             throw new IllegalStateException("Unable to load invoice template", ex);
@@ -72,10 +72,17 @@ public class ReportServiceImpl implements ReportService {
 
     private InputStream loadLogoStream() {
         try {
-            Resource resource = resourceLoader.getResource("classpath:static/logo.png");
+            Resource resource = resourceLoader.getResource("classpath:static/images/falimy_mart_logo.png");
             return resource.getInputStream();
         } catch (Exception ex) {
-            throw new IllegalStateException("Unable to load invoice logo", ex);
+            System.err.println(
+                    "Failed to load logo from primary location, falling back to default logo: " + ex.getMessage());
+            try {
+                Resource defaultResource = resourceLoader.getResource("classpath:static/logo.png");
+                return defaultResource.getInputStream();
+            } catch (Exception fallbackEx) {
+                throw new IllegalStateException("Unable to load invoice logo", fallbackEx);
+            }
         }
     }
 }
