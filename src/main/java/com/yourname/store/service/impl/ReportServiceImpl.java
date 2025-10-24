@@ -5,9 +5,11 @@ import com.yourname.store.report.InvoiceItem;
 import com.yourname.store.service.OrderService;
 import com.yourname.store.service.ReportService;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -27,6 +29,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final OrderService orderService;
     private final ResourceLoader resourceLoader;
+    private final DataSource dataSource; // Kết nối database cho products report
 
     @Override
     public byte[] generateInvoicePdf(Long orderId) {
@@ -65,6 +68,28 @@ public class ReportServiceImpl implements ReportService {
         } catch (Exception e) {
             e.printStackTrace(); // In lỗi để dễ debug
             throw new IllegalStateException("Failed to generate invoice PDF", e);
+        }
+    }
+
+    @Override
+    public byte[] generateAllProductsPdf() {
+        // CÁCH 2: Sử dụng JDBC Connection - JasperReports tự query database
+        Map<String, Object> params = new HashMap<>();
+
+        try (InputStream templateStream = resourceLoader
+                .getResource("classpath:reports/all-products.jrxml")
+                .getInputStream();
+                Connection connection = dataSource.getConnection()) {
+
+            JasperDesign jasperDesign = JRXmlLoader.load(templateStream);
+            JasperReport report = JasperCompileManager.compileReport(jasperDesign);
+
+            // Truyền Connection - Jasper sẽ execute SQL query trong template
+            JasperPrint print = JasperFillManager.fillReport(report, params, connection);
+            return JasperExportManager.exportReportToPdf(print);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Failed to generate all products PDF", e);
         }
     }
 

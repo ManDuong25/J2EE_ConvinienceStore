@@ -6,6 +6,13 @@ const reportApi = {
       responseType: "blob"
     });
     return response.data;
+  },
+
+  async downloadAllProducts() {
+    const response = await axiosClient.get(`/reports/products/all.pdf`, {
+      responseType: "blob"
+    });
+    return response.data;
   }
 };
 
